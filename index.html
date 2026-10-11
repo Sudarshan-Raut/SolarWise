@@ -1,0 +1,150 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>SolarWise – Intelligent Solar Platform</title>
+<style>
+:root{--bg:#f8fafc;--card:#fff;--tx:#0f172a;--mut:#475569;--g:#059669;--g2:#d1fae5;--bd:#e2e8f0;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0b1220;--card:#131c2e;--tx:#e5eef8;--mut:#9fb0c5;--g:#34d399;--g2:#064e3b;--bd:#24324a}}
+:root[data-theme=dark]{--bg:#0b1220;--card:#131c2e;--tx:#e5eef8;--mut:#9fb0c5;--g:#34d399;--g2:#064e3b;--bd:#24324a}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;line-height:1.55}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--card);border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:12px;padding:8px 16px}
+.logo{font-weight:800;font-size:1.3rem;white-space:nowrap}.logo b{color:var(--g)}
+nav{display:flex;gap:4px;overflow-x:auto;flex:1}nav button{border:0;background:none;color:var(--mut);padding:8px 11px;border-radius:8px;cursor:pointer;font:600 .85rem inherit;white-space:nowrap}
+nav button.on,nav button:hover{background:var(--g2);color:var(--g)}
+main{max-width:1100px;margin:auto;padding:20px 16px 50px}section{display:none}section.on{display:block}
+h1{font-size:clamp(1.8rem,5vw,2.8rem);margin:.2em 0}h2{margin:.2em 0 .6em}h3{margin:.2em 0 .4em}h1 b,h2 b{color:var(--g)}
+.hero{background:linear-gradient(135deg,#022c22,#047857);color:#fff;border-radius:18px;padding:36px 24px;text-align:center}.hero p{max-width:640px;margin:8px auto 18px;color:#d1fae5}
+.btn{background:var(--g);color:#fff;border:0;border-radius:10px;padding:10px 18px;font-weight:700;cursor:pointer;font-size:.95rem}.btn.o{background:none;border:1px solid var(--g);color:var(--g)}.hero .btn{background:#34d399;color:#022c22}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}.card{background:var(--card);border:1px solid var(--bd);border-top:3px solid var(--g);border-radius:14px;padding:16px}
+.card.l{cursor:pointer}.card.l:hover{box-shadow:0 4px 16px #0002}.mut{color:var(--mut);font-size:.9rem}
+.two{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start}
+label{display:block;font-size:.82rem;font-weight:600;color:var(--mut);margin:8px 0 2px}input,select{width:100%;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+input[type=checkbox]{width:auto}input[type=range]{padding:0}
+.kpi{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));margin:10px 0}.kpi div{background:var(--g2);border-radius:12px;padding:10px 12px}.kpi b{display:block;font-size:1.35rem;color:var(--g)}.kpi span{font-size:.78rem;color:var(--mut)}
+table{width:100%;border-collapse:collapse;font-size:.85rem}td,th{padding:4px;text-align:left}th{color:var(--mut)}td input{padding:5px}
+.bar{height:8px;background:var(--g);border-radius:4px}.warn{background:#fef3c7;color:#92400e;padding:8px 12px;border-radius:8px;margin:8px 0;font-size:.88rem}
+details{border:1px solid var(--bd);border-radius:10px;padding:8px 12px;margin:8px 0;background:var(--card)}summary{cursor:pointer;font-weight:600}
+.cv{position:relative;height:260px}footer{text-align:center;color:var(--mut);font-size:.8rem;padding:20px}
+ul{padding-left:20px}@media print{header,.noprint{display:none}section{display:block!important}}
+</style></head><body>
+<header><div class="logo">Solar<b>Wise</b></div><nav id="nav"></nav></header>
+<main>
+<section id="home" class="on">
+<div class="hero"><h1>Go solar with <b style="color:#34d399">confidence</b></h1><p>SolarWise is your digital solar consultant: size your system, find energy-hungry appliances, forecast savings and plan battery backup — in minutes.</p><button class="btn" onclick="show('sizing')">Start with Solar Sizing</button> <button class="btn o" style="color:#fff;border-color:#fff" onclick="show('learn')">Learn about solar</button></div>
+<h2 style="margin-top:24px">Seven modules, <b>one platform</b></h2>
+<div class="grid" id="mods"></div>
+<p class="mut">Tip: change your numbers in <b>Solar Sizing</b> — every other module and the Dashboard update automatically.</p>
+</section>
+
+<section id="sizing"><h2>1. Solar <b>Sizing Calculator</b></h2>
+<div class="two"><div class="card"><label>Location (sets average sun-hours)</label><select id="loc" onchange="$('sun').value=this.value;calc()"><option value="5.4">Pune</option><option value="5.0">Mumbai</option><option value="5.2">Delhi</option><option value="5.8">Jaipur</option><option value="5.3">Bengaluru</option><option value="5.4">Chennai</option><option value="4.6">Kolkata</option><option value="5.7">Ahmedabad</option></select>
+<label>Peak sun-hours per day (kWh/m²/day)</label><input id="sun" type="number" step=".1" value="5.4" oninput="calc()">
+<label>Monthly electricity use (units / kWh)</label><input id="units" type="number" value="450" oninput="calc()">
+<label>Tariff (₹ per unit)</label><input id="tariff" type="number" step=".1" value="9" oninput="calc()">
+<label>Available shadow-free roof area (m²)</label><input id="roof" type="number" value="40" oninput="calc()">
+<label>Installation cost (₹ per kW)</label><input id="cpk" type="number" value="60000" oninput="calc()"></div>
+<div class="card"><h3>Recommendation</h3><div class="kpi" id="sizeK"></div><div id="sizeMsg"></div><p class="mut">Formula: kW = daily units ÷ (sun-hours × 0.8 performance ratio × site factor). About 10 m² of roof per kW.</p></div></div></section>
+
+<section id="energy"><h2>2. Household <b>Energy Analyzer</b></h2>
+<div class="two"><div class="card"><h3>Your appliances</h3><p class="mut">Energy = Power (W) × Qty × Hours/day</p><table><thead><tr><th>Appliance</th><th>Watts</th><th>Qty</th><th>Hrs/day</th><th></th></tr></thead><tbody id="appT"></tbody></table><br><button class="btn o" onclick="apps.push({n:'New appliance',w:100,q:1,h:1});rApps();calc()">+ Add appliance</button></div>
+<div class="card"><h3>Ranking (highest first)</h3><div class="kpi" id="enK"></div><div id="rank"></div><p id="tip" class="mut"></p><button class="btn" onclick="$('units').value=Math.round(S.mon);calc();show('sizing')">Use this as my monthly units</button></div></div></section>
+
+<section id="potential"><h2>3. Solar <b>Potential Calculator</b></h2>
+<div class="two"><div class="card"><label>Roof orientation</label><select id="ori" onchange="calc()"><option value="1">South (best)</option><option value=".95">South-East / South-West</option><option value=".85">East / West</option><option value=".7">North (poor)</option></select>
+<label>Panel tilt</label><select id="tilt" onchange="calc()"><option value="1">15–25° (ideal for India)</option><option value=".93">Flat roof (0–5°)</option><option value=".92">Steep (&gt;35°)</option></select>
+<label>Shading: <span id="shV">5</span>%</label><input id="shade" type="range" min="0" max="50" value="5" oninput="$('shV').textContent=this.value;calc()"></div>
+<div class="card"><h3>Solar Suitability Score</h3><div class="kpi" id="potK"></div><p class="mut">Score combines sun-hours, orientation, tilt and shading. Shading by even one tree or water tank can cut output sharply.</p></div></div></section>
+
+<section id="weather"><h2>4. Weather &amp; <b>Solar Generation</b></h2>
+<div class="two"><div class="card"><p class="mut">Enter today's weather (check any weather app) to estimate realistic output.</p><label>Cloud cover: <span id="clV">20</span>%</label><input id="cloud" type="range" min="0" max="100" value="20" oninput="$('clV').textContent=this.value;calc()">
+<label>Air temperature (°C)</label><input id="temp" type="number" value="32" oninput="calc()"><div class="kpi" id="wxK"></div><p class="mut">Cloud lowers output up to ~75%; panels lose ~0.4% per °C of cell temperature above 25 °C.</p></div>
+<div class="card"><h3>Seasonal generation (kWh / month)</h3><div class="cv"><canvas id="cSeason"></canvas></div></div></div></section>
+
+<section id="roi"><h2>5. ROI &amp; <b>Payback Calculator</b></h2>
+<div class="two"><div class="card"><label><input type="checkbox" id="sub" checked onchange="calc()"> Apply government subsidy (PM Surya Ghar rule: ₹30,000/kW for first 2 kW, ₹18,000 for 3rd kW, max ₹78,000)</label>
+<label>Yearly tariff increase (%)</label><input id="esc" type="number" step=".5" value="3" oninput="calc()"><p class="mut">Verify current subsidy rules on pmsuryaghar.gov.in. Assumes 0.5%/year panel degradation. Uses cost and tariff from Solar Sizing.</p></div>
+<div class="card"><div class="kpi" id="roiK"></div><div class="cv"><canvas id="cRoi"></canvas></div></div></div></section>
+
+<section id="battery"><h2>6. Solar + <b>Battery Calculator</b></h2>
+<div class="two"><div class="card"><h3>Essential appliances during a power cut</h3><div id="bats"></div>
+<label>Backup duration (hours)</label><input id="bh" type="number" value="4" oninput="calc()"><label>Battery type</label><select id="dod" onchange="calc()"><option value=".8">Lithium (LiFePO₄) – 80% usable</option><option value=".5">Lead-acid tubular – 50% usable</option></select>
+<label>System voltage</label><select id="volt" onchange="calc()"><option>12</option><option>24</option><option>48</option></select></div>
+<div class="card"><h3>Recommended backup</h3><div class="kpi" id="batK"></div><p class="mut">Battery size includes ~90% round-trip efficiency; inverter has 25% headroom for start-up surges (fridge, pumps).</p></div></div></section>
+
+<section id="dash"><h2>7. The SolarWise <b>Dashboard</b></h2>
+<p class="mut">All modules in one place. <button class="btn o noprint" onclick="print()">Print / save as PDF</button></p><div class="kpi" id="dK"></div>
+<div class="two"><div class="card"><h3>Generation vs consumption</h3><div class="cv"><canvas id="c1"></canvas></div></div><div class="card"><h3>25-year cumulative savings</h3><div class="cv"><canvas id="c2"></canvas></div></div></div>
+<div class="card" style="margin-top:16px"><h3>Where your electricity goes</h3><div class="cv"><canvas id="c3"></canvas></div></div></section>
+
+<section id="learn"><h2>Solar <b>Knowledge Centre</b></h2>
+<div class="grid"><div class="card"><h3>☀️ How solar works</h3><p class="mut">Solar panels contain photovoltaic (PV) cells, usually silicon. Sunlight knocks electrons loose, creating DC current. An inverter converts it to AC for your home. Surplus can feed the grid (net metering) or charge batteries.</p></div>
+<div class="card"><h3>🔌 Key terms</h3><ul class="mut"><li><b>kW</b> – power (rate). A 3 kW system produces up to 3 kW in full sun.</li><li><b>kWh / unit</b> – energy used over time. 1 kW for 1 hour.</li><li><b>Peak sun-hours</b> – hours of 1 kW/m² equivalent sun per day (India ≈ 4.5–6).</li><li><b>Performance ratio</b> – real-world losses (~75–85% efficiency).</li></ul></div>
+<div class="card"><h3>🧱 Panel types</h3><ul class="mut"><li><b>Mono PERC / TOPCon</b> – 20–23% efficient, best for limited roofs.</li><li><b>Polycrystalline</b> – cheaper, 16–18%, being phased out.</li><li><b>Thin-film</b> – flexible, low efficiency, niche use.</li></ul></div></div>
+<h3 style="margin-top:20px">System types</h3>
+<div class="grid"><div class="card"><b>On-grid</b><p class="mut">No battery; cheapest, uses net metering. Shuts down during grid outage for safety.</p></div><div class="card"><b>Off-grid</b><p class="mut">Battery-based, fully independent. Costlier; good for remote areas.</p></div><div class="card"><b>Hybrid</b><p class="mut">Grid + battery. Gives backup in cuts and savings in daytime.</p></div></div>
+<h3 style="margin-top:20px">Frequently asked questions</h3>
+<details><summary>How long do solar panels last?</summary><p class="mut">Typically 25–30 years, with output dropping about 0.5% per year. Inverters usually need replacing in 8–12 years.</p></details>
+<details><summary>Will solar work on cloudy or rainy days?</summary><p class="mut">Yes, at reduced output (roughly 10–50% of clear-sky). Annual estimates already include this.</p></details>
+<details><summary>How much maintenance is needed?</summary><p class="mut">Clean panels with water every 2–4 weeks (more in dusty areas), early morning or evening. Check for shading and loose wiring yearly.</p></details>
+<details><summary>How much roof space do I need?</summary><p class="mut">About 8–10 m² per kW. A typical 3 kW home system needs 25–30 m².</p></details>
+<details><summary>What is net metering?</summary><p class="mut">Your meter records units exported to the grid and credits them against units imported, lowering your bill. Rules and rates differ by state — check your DISCOM.</p></details>
+<details><summary>Is solar really good for the environment?</summary><p class="mut">Yes. Each kWh from solar avoids about 0.8 kg of CO₂ from India's coal-heavy grid, and a panel repays its manufacturing energy in 1–3 years.</p></details>
+<details><summary>Which direction should panels face?</summary><p class="mut">In India (northern hemisphere), south-facing at a tilt close to your latitude (15–25° for most cities).</p></details>
+<p class="mut">Subsidy and tariff values are indicative; confirm with your state's DISCOM or an MNRE-empanelled installer before investing.</p></section>
+</main>
+<footer>SolarWise · Intelligent Renewable Energy &amp; Solar System Platform · Dept. of AI &amp; DS, APCOER Pune<br>Estimates are for planning only, not a quotation.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const $=i=>document.getElementById(i),f=i=>parseFloat($(i).value)||0,R=(n,d=0)=>(+n).toLocaleString('en-IN',{maximumFractionDigits:d}),S={};
+const tabs=[['home','Home'],['sizing','1 Sizing'],['energy','2 Energy'],['potential','3 Potential'],['weather','4 Weather'],['roi','5 ROI'],['battery','6 Battery'],['dash','7 Dashboard'],['learn','Learn Solar']];
+$('nav').innerHTML=tabs.map(t=>`<button id="b_${t[0]}" onclick="show('${t[0]}')">${t[1]}</button>`).join('');
+$('mods').innerHTML=[['sizing','📐','Solar Sizing','Right kW for your bill and roof'],['energy','🔌','Energy Analyzer','Rank your power-hungry appliances'],['potential','🌤️','Solar Potential','Suitability score for your roof'],['weather','⛅','Weather & Generation','Realistic daily and seasonal output'],['roi','💰','ROI & Payback','Net investment, subsidy, payback years'],['battery','🔋','Solar + Battery','Battery & inverter for power cuts'],['dash','📊','Dashboard','Everything in interactive charts']].map(m=>`<div class="card l" onclick="show('${m[0]}')"><h3>${m[1]} ${m[2]}</h3><span class="mut">${m[3]}</span></div>`).join('');
+function show(id){document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id==id));tabs.forEach(t=>$('b_'+t[0]).classList.toggle('on',t[0]==id));scrollTo(0,0);draw()}
+let apps=[{n:'Air conditioner (1.5 ton)',w:1500,q:1,h:6},{n:'Refrigerator',w:150,q:1,h:8},{n:'Ceiling fan',w:60,q:4,h:10},{n:'LED light',w:10,q:8,h:6},{n:'Water heater (geyser)',w:2000,q:1,h:1},{n:'Television',w:100,q:1,h:4},{n:'Washing machine',w:500,q:1,h:1},{n:'Wi-Fi router',w:15,q:1,h:24}];
+function rApps(){$('appT').innerHTML=apps.map((a,i)=>`<tr><td><input value="${a.n}" oninput="up(${i},'n',this.value)"></td><td><input type=number value="${a.w}" oninput="up(${i},'w',this.value)"></td><td><input type=number value="${a.q}" oninput="up(${i},'q',this.value)"></td><td><input type=number step=".5" value="${a.h}" oninput="up(${i},'h',this.value)"></td><td><button class="btn o" style="padding:3px 8px" onclick="apps.splice(${i},1);rApps();calc()">✕</button></td></tr>`).join('')}
+function up(i,k,v){apps[i][k]=k=='n'?v:parseFloat(v)||0;calc()}
+const bat=[['Ceiling fans ×3',180],['LED lights ×6',60],['Refrigerator',150],['Wi-Fi router',15],['Television',100],['Laptop & phone charging',80]];
+$('bats').innerHTML=bat.map((b,i)=>`<label style="display:flex;gap:8px;align-items:center;font-size:.9rem;color:var(--tx)"><input type=checkbox class=bt data-w="${b[1]}" ${i<4?'checked':''} onchange="calc()"> ${b[0]} (${b[1]} W)</label>`).join('');
+const MF=[.95,1,1.1,1.1,1.05,.7,.6,.6,.75,.95,.95,.9],MN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],avg=MF.reduce((a,b)=>a+b)/12;
+const K=(o,arr)=>o.innerHTML=arr.map(a=>`<div><b>${a[1]}</b><span>${a[0]}</span></div>`).join('');
+function calc(){
+ const u=f('units'),t=f('tariff'),sun=f('sun')||5,roof=f('roof'),cpk=f('cpk'),PR=.8;
+ const eff=f('ori')*f('tilt')*(1-f('shade')/100);
+ // sizing
+ const kwNeed=Math.max(.5,Math.ceil(u/30/(sun*PR*eff)*2)/2),maxKw=Math.floor(roof/10*2)/2,kw=Math.max(.5,Math.min(kwNeed,maxKw||.5));
+ const annual=kw*sun*PR*eff*365,mGen=annual/12,off=Math.min(100,mGen/(u||1)*100);
+ Object.assign(S,{kw,annual,mGen,off,u,t,eff});
+ K($('sizeK'),[['Recommended capacity',kwNeed+' kW'],['Roof area needed',R(kwNeed*10)+' m²'],['Monthly generation',R(mGen)+' kWh'],['Bill offset',R(off)+'%'],['System cost',' ₹'+R(kw*cpk)]]);
+ $('sizeMsg').innerHTML=kwNeed>kw?`<div class="warn">Your roof fits only ${kw} kW (need ${kwNeed} kW). Consider higher-efficiency panels or reducing consumption.</div>`:'<div class="warn" style="background:var(--g2);color:var(--g)">✔ Your roof area is sufficient.</div>';
+ // energy
+ const rows=apps.map(a=>({n:a.n,d:a.w*a.q*a.h/1000})).sort((a,b)=>b.d-a.d),tot=rows.reduce((s,r)=>s+r.d,0)||1;S.rows=rows;S.mon=tot*30;
+ K($('enK'),[['Daily use',R(tot,1)+' kWh'],['Monthly use',R(tot*30)+' kWh'],['Est. monthly bill','₹'+R(tot*30*t)]]);
+ $('rank').innerHTML='<table>'+rows.map((r,i)=>`<tr><td>${i+1}. ${r.n}</td><td>${R(r.d*30,1)} kWh/mo</td><td style="width:35%"><div class="bar" style="width:${r.d/rows[0].d*100||0}%"></div></td></tr>`).join('')+'</table>';
+ $('tip').textContent=rows[0]?`Tip: ${rows[0].n} uses ${R(rows[0].d/tot*100)}% of your energy. A 5-star rated model or fewer hours here saves the most.`:'';
+ // potential
+ const score=Math.min(100,Math.round(sun/6*eff*100/ (1) *1.02));S.score=score;
+ K($('potK'),[['Suitability score',score+'/100'],['Rating',score>=80?'Excellent':score>=60?'Good':'Fair'],['Yearly output per kW',R(sun*PR*eff*365)+' kWh'],['Your system yearly',R(annual)+' kWh']]);
+ // weather
+ const cF=1-.75*f('cloud')/100,tF=1-.004*Math.max(0,f('temp')+20-25),day=kw*sun*PR*eff*cF*tF/ (1);
+ K($('wxK'),[['Estimated today',R(day,1)+' kWh'],['Cloud factor',R(cF*100)+'%'],['Temperature factor',R(tF*100)+'%'],['Value today','₹'+R(day*t)]]);
+ S.mon12=MF.map(m=>annual/12*m/avg);
+ // roi
+ const cost=kw*cpk,subs=$('sub').checked?Math.min(kw,2)*30000+(kw>2?Math.min(kw-2,1)*18000:0):0,net=Math.max(0,cost-subs),a0=Math.min(annual,u*12)*t,esc=f('esc')/100;
+ let cum=-net,ser=[],pb=null;for(let y=1;y<=25;y++){const s=a0*Math.pow(.995,y-1)*Math.pow(1+esc,y-1),pr=cum;cum+=s;if(pb==null&&cum>=0)pb=y-1+(-pr)/s;ser.push(Math.round(cum))}
+ Object.assign(S,{cost,subs,net,pb,ser,a0,total:cum});
+ K($('roiK'),[['System cost','₹'+R(cost)],['Subsidy','₹'+R(subs)],['Net investment','₹'+R(net)],['Payback',pb?R(pb,1)+' years':'>25 yrs'],['Year-1 savings','₹'+R(a0)],['25-yr net profit','₹'+R(cum)]]);
+ // battery
+ let w=0;document.querySelectorAll('.bt:checked').forEach(c=>w+=+c.dataset.w);const wh=w*f('bh'),d=f('dod'),kwh=wh/(d*.9)/1000,ah=wh/(f('volt')*d*.9),inv=Math.max(.5,Math.ceil(w*1.25/800*2)/2);
+ K($('batK'),[['Backup load',w+' W'],['Energy needed',R(wh/1000,2)+' kWh'],['Battery capacity',R(kwh,1)+' kWh'],['Or in Ah @ '+f('volt')+'V',R(ah)+' Ah'],['Inverter size',inv+' kVA']]);
+ // dashboard
+ const co2=annual*.82/1000;
+ K($('dK'),[['System size',kw+' kW'],['Yearly generation',R(annual)+' kWh'],['Bill offset',R(off)+'%'],['Net investment','₹'+R(net)],['Payback',pb?R(pb,1)+' yrs':'>25 yrs'],['25-yr profit','₹'+R(cum)],['CO₂ avoided / year',R(co2,1)+' t'],['≈ Trees planted',R(co2*1000/21)],['Suitability',score+'/100']]);
+ draw()}
+let ch={};
+function mk(id,cfg){if(ch[id])ch[id].destroy();ch[id]=new Chart($(id),cfg)}
+function draw(){if(typeof Chart=='undefined'||!S.ser)return;const cs=getComputedStyle(document.documentElement),tx=cs.getPropertyValue('--mut')||'#475569';Chart.defaults.color=tx.trim();Chart.defaults.maintainAspectRatio=false;
+ const on=i=>$(i).classList.contains('on'),G='#10b981',O='#f59e0b';
+ if(on('weather'))mk('cSeason',{type:'bar',data:{labels:MN,datasets:[{label:'kWh',data:S.mon12.map(Math.round),backgroundColor:G}]},options:{plugins:{legend:{display:false}}}});
+ if(on('roi'))mk('cRoi',{type:'line',data:{labels:S.ser.map((_,i)=>i+1),datasets:[{label:'Cumulative net savings (₹)',data:S.ser,borderColor:G,fill:false,pointRadius:0}]},options:{scales:{x:{title:{display:true,text:'Year'}}}}});
+ if(on('dash')){mk('c1',{type:'bar',data:{labels:MN,datasets:[{label:'Solar generation',data:S.mon12.map(Math.round),backgroundColor:G},{label:'Consumption',data:MN.map(()=>Math.round(S.u)),backgroundColor:O}]}});
+ mk('c2',{type:'line',data:{labels:S.ser.map((_,i)=>i+1),datasets:[{label:'₹',data:S.ser,borderColor:G,backgroundColor:'#10b98133',fill:true,pointRadius:0}]},options:{plugins:{legend:{display:false}}}});
+ mk('c3',{type:'doughnut',data:{labels:S.rows.map(r=>r.n),datasets:[{data:S.rows.map(r=>+(r.d*30).toFixed(1)),backgroundColor:['#059669','#10b981','#34d399','#6ee7b7','#f59e0b','#fbbf24','#0ea5e9','#6366f1','#ec4899','#94a3b8']}]},options:{plugins:{legend:{position:'right'}}}})}}
+rApps();calc();
+</script></body></html>
